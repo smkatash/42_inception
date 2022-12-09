@@ -1,8 +1,8 @@
-# The base system of the container
+# Base system of the container
 FROM debian:buster
 
 # shell command to install openssl && nginx
-RUN apt-get update -y && apt-get install -y \
+RUN apt-get update && apt-get install -y \
 	openssl \
 	nginx
 
@@ -10,7 +10,7 @@ RUN apt-get update -y && apt-get install -y \
 # Generate a 2048-bit RSA key, create certificate sign request and self-sign the certificate
 RUN mkdir /etc/nginx/ssl \
 	&& openssl req -newkey rsa:2048 -new -nodes -x509 -days 365 -keyout /etc/nginx/ssl/ktashbae.key \
-	-out /etc/nginx/ssl/ktashbae.csr -subj 'CN=${DOMAIN_NAME}'
+	-out /etc/nginx/ssl/ktashbae.csr -subj '/C=DE/P=Heilbronn/O=42/CN=ktashbae'
 
 
 # The sites-available folder is for storing all vhost configurations, whether or not they're currently enabled.

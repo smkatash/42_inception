@@ -18,3 +18,5 @@ days to certify the certificate for.
 verify the ownership of a keypair without having direct access to the private key
 - subj arg: replaces subject field of input request with specified data and outputs 
 modified request.
+
+***Wordpress***
