@@ -1,0 +1,20 @@
+***OpenSSL***
+src: https://www.openssl.org/docs/man1.0.2/man1/openssl-req.html
+
+openssl req -newkey rsa:2048 -new -nodes -x509 -days 365 -keyout /etc/nginx/ssl/ktashbae.key \
+	-out /etc/nginx/ssl/ktashbae.csr -subj /CN=${DOMAIN_NAME}
+
+-newkey arg :  creates a new certificate request and a new private key. 
+The argument takes one of several forms. rsa:nbits, where nbits is the number of bits, 
+generates an RSA key nbits in size. 
+-new: generates a new certificate request
+-nodes: if a private key is created it will not be encrypted.
+-x509: a self signed certificate instead of a certificate request. 
+-days n : when the -x509 option is being used this specifies the number of 
+days to certify the certificate for.
+-keyout [filename] :  filename to write the newly created private key to.
+-out filename: the output filename to write to or standard output by default
+-.csr is a certificate signing request, a challenge used by a trusted third party to 
+verify the ownership of a keypair without having direct access to the private key
+- subj arg: replaces subject field of input request with specified data and outputs 
+modified request.
