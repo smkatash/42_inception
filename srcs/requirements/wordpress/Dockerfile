@@ -1,6 +1,8 @@
 # container base system
 FROM debian:buster
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 # shell command to install tools
 RUN apt-get update && apt-get -y install \
 	php-fpm \
@@ -16,8 +18,9 @@ RUN apt-get update && apt-get -y install \
 	php-xml \
 	php-zip \
 	wget \
-	openssl \
-	vim
+	openssl 
+
+WORKDIR /var/www/html/
 
 # Download wordpress and extract
 RUN wget https://wordpress.org/latest.tar.gz \
