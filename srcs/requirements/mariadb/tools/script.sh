@@ -1,12 +1,24 @@
 #!/bin/bash
 
-service mysql start
-# db_exist=$(echo "SHOW DATABASES" | mysql -u root | grep "wp_db" | wc -l)
-# echo "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci" | mysql -u root
-# echo "CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD'" | mysql -u root
-# echo "GRANT ALL ON $MYSQL_DATABASE .* TO '$MYSQL_USER'@'%'" | mysql -u root
-# FLUSH PRIVILEGES;
-# service mysql stop
-# exec /usr/sbin/mysqld -u root
+chown -R mysql:mysql /var/lib/mysql
 
-cat /tmp/db_init.sql | mysql -u root
+sed -i "s|.*bind-address\s*=.*|bind-address=0.0.0.0|" /etc/mysql/mariadb.conf.d/50-server.cnf;
+sed -i "s|#port|port |" /etc/mysql/mariadb.conf.d/50-server.cnf
+
+service mysql start
+
+mysql --user=$DB_ROOT << EOF
+CREATE DATABASE IF NOT EXISTS $DB_NAME;
+CREATE USER IF NOT EXISTS '$DB_USER'@'%' IDENTIFIED BY '$DB_USER_PWD';
+GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'%' IDENTIFIED BY '$DB_USER_PWD' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON *.* TO '$DB_ROOT'@'%' IDENTIFIED BY '$DB_ROOT_PWD';
+FLUSH PRIVILEGES;
+
+UPDATE mysql.user SET Password=PASSWORD('$DB_ROOT_PWD') WHERE User='$DB_ROOT';
+UPDATE mysql.user SET plugin = '' WHERE User = '$DB_ROOT' AND host = 'localhost';
+EOF
+
+sleep 15
+service mysql stop
+
+exec mysqld_safe

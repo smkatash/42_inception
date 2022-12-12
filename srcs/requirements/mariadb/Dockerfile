@@ -1,21 +1,24 @@
 FROM		debian:buster
 
-COPY		./tools/init_db.sql		/tmp/
-COPY		./tools/script.sh		/tmp/
-COPY		./conf/conf 			/tmp/
+RUN		echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
-RUN			apt-get update
-RUN			apt-get install -y \
-				mariadb-server \
-				mariadb-client \
-				dumb-init
+# copy predefined scripts to tmp of container, data are cleared upon machine restart.
+COPY		./tools/script.sh 	/tmp/
 
-RUN			chmod 111 /tmp/script.sh
-RUN			mv ./tmp/conf /etc/mysql/conf
-RUN			chmod 0444 /etc/mysql/conf
+# installation of necessary packages
+RUN			apt-get update && apt-get install -y \
+			mariadb-server \
+			mariadb-client \
+			dumb-init
 
+# solves many of these problems: in front of the command it will take on the role of PID 1.
+# It immediately spawns the process as PID ~2, and then proxies on any signals it receives. 
+# This helps to avoid special kernel behavior applied to PID 1, 
+# while also handling regular responsibilities of the init system (like reaping orphaned zombie processes).
 ENTRYPOINT	["/usr/bin/dumb-init"]
 
+# inter-container communication
 EXPOSE		3306
 
-CMD			["/tmp/script.sh"]
+# execute script
+CMD			["bash", "/tmp/script.sh"]

@@ -9,19 +9,17 @@ all:  $(NAME)
 
 build:
 			sudo docker-compose build
-
 up:
 			sudo docker-compose -f ./srcs/docker-compose.yml up -d --build
 
-down:
-			sudo docker-compose -f ./srcs/docker-compose.yml down --rmi all
+down:		sudo docker-compose -f ./srcs/docker-compose.yml down
 
-fclean:		sudo docker-compose down
-			sudo docker rmi -f $$(docker images -aq)
+clean:		sudo docker-compose -f ./srcs/docker-compose.yml down -v --rmi all --remove-orphans
 
-# Inspections
-list:
-			sudo docker-compose -f ./srcs/docker-compose.yml ls
+fclean:		clean
+			sudo rm -rf /home/ktashbae/data/db
+			sudo rm -rf /home/ktashbae/data/wordpress
+			sudo docker system prune --volumes --all --force
+			sudo docker network prune --force
+			sudo docker volume prune --force
 
-logs:
-			sudo docker-compose -f ./srcs/docker-compose.yml logs
