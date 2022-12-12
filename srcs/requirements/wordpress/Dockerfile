@@ -1,32 +1,24 @@
-# container base system
-FROM debian:buster
+FROM		debian:buster
 
-ARG DEBIAN_FRONTEND=noninteractive
+COPY		./tools/script.sh		/tmp
+COPY		./conf/wp_config.php	/tmp
 
-# shell command to install tools
-RUN apt-get update && apt-get -y install \
-	php-fpm \
-	php-cgi \
-	php-common \
-	php-opcache \
-	php-mysqli \
-	php-cli \
-	php-gd \
-	php-json \
-	php-dom \
-	php-mbstring \
-	php-xml \
-	php-zip \
-	wget \
-	openssl 
+RUN			apt-get update && apt-get install -y \
+			php-fpm \
+			php-mysql \
+			curl \
+			dumb-init \
+			tar
 
-WORKDIR /var/www/html/
+# set config of php https://gist.github.com/excid3/3669e021f005e0f62900aeb980bc890d
+RUN			echo "listen = 9000" >> /etc/php/7.3/fpm/pool.d/www.conf
+RUN			curl -LO https://wordpress.org/latest.tar.gz
+RUN			tar -xzvf latest.tar.gz
 
-# Download wordpress and extract
-RUN wget https://wordpress.org/latest.tar.gz \
-	&& tar -xzvf latest.tar.gz && rm -rf latest.tar.gz
+# dumb-init is a simple process supervisor and init system designed to run as PID 1 inside
+ENTRYPOINT	["/usr/bin/dumb-init"]
 
-EXPOSE 9000
+EXPOSE		9000
 
-# Run FPM in foreground
-CMD ["php-fpm7.3", "-F"]
+CMD			["bash", "/tmp/script.sh"]
+

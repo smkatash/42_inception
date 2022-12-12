@@ -1,22 +1,21 @@
-# container base system
-FROM debian:buster
+FROM		debian:buster
 
-# install mariadb
-RUN apt-get update && apt-get -y install mariadb-server mariadb-client
+COPY		./tools/init_db.sql		/tmp/
+COPY		./tools/script.sh		/tmp/
+COPY		./conf/conf 			/tmp/
 
-# make /var/run/mysqld dir and assign read rights
-RUN mkdir -p /var/run/mysqld && chown -R mysql:mysql /var/run/mysqld
+RUN			apt-get update
+RUN			apt-get install -y \
+				mariadb-server \
+				mariadb-client \
+				dumb-init
 
-# db port
-EXPOSE 3306
+RUN			chmod 111 /tmp/script.sh
+RUN			mv ./tmp/conf /etc/mysql/conf
+RUN			chmod 0444 /etc/mysql/conf
 
-# copy tools
-COPY ./tools/db_init.sql /tmp/
-COPY ./tools/script.sh /tmp/
+ENTRYPOINT	["/usr/bin/dumb-init"]
 
-# db init
-RUN chmod 755 /tmp/script.sh
-RUN bash /tmp/script.sh
+EXPOSE		3306
 
-# shell cmd
-CMD mysqld
+CMD			["/tmp/script.sh"]

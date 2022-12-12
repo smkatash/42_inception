@@ -1,0 +1,5 @@
+# mariadb default conf https://mariadb.com/kb/en/configuring-mariadb-with-option-files/
+#bind 0.0.0.0 to listen to all interfaces
+[mysqld]
+port=3306
+bind=0.0.0.0

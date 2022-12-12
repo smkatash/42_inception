@@ -7,7 +7,6 @@ $(NAME):
 
 all:  $(NAME)
 
-# 	Manipulations
 build:
 			sudo docker-compose build
 

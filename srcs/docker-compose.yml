@@ -1,72 +1,54 @@
-version: '3.8'
+version: '3'
 
 services:
-    #MARIDB
     mariadb:
-        build:
-            context: ./requirements/mariadb
-            dockerfile: Dockerfile
-        container_name: "mariadb"
-        ports: 
-          - 3306:3306
-        volumes:
-            - db:/var/lib/mysql
-        env_file: .env
+        container_name: mariadb
+        build: ./requirements/mariadb
         restart: unless-stopped
         networks:
-          - inception
-
-    #WORDPRESS
-    wordpress:
-        build:
-            context: ./requirements/wordpress
-            dockerfile: Dockerfile
-        ports:
-            - 9000:9000
-        depends_on:
-            - mariadb
+         - inception
         volumes:
-            - wp_db:/var/www/html
+         - db_vol:/var/lib/mysql/
         env_file: .env
-        environment:
-            - WORDPRESS_DB_HOST=mysql:3306
-            - WORDPRESS_DB_USER=$MYSQL_USER
-            - WORDPRESS_DB_PASSWORD=$MYSQL_PASSWORD
-            - WORDPRESS_DB_NAME=$MYSQL_DATABASE
-        restart: unless-stopped
-        networks:
-          - inception
 
-    #NGINX
     nginx:
-        build:
-            context: ./requirements/nginx
-            dockerfile: Dockerfile
-        container_name: "nginx"
-        ports:
-            - 443:443
+        container_name: nginx
+        build: ./requirements/nginx/
         depends_on:
-            - wordpress
-        volumes:
-            - wp_db:/var/www/html
+         - wordpress
+        ports:
+         - "443:443"
         restart: unless-stopped
         networks:
-            - inception
+         - inception
+        volumes:
+         - wp_vol:/var/www/
+
+    wordpress:
+        container_name: wordpress
+        build: ./requirements/wordpress/
+        depends_on:
+         - mariadb
+        restart: unless-stopped
+        networks:
+         - inception
+        volumes:
+         - wp_vol:/var/www/
+        env_file: .env
 
 networks:
-    inception:
-        driver: bridge
+     inception:
 
 volumes:
-    db:
-        driver: local
-        driver_opts:
-            type: none
-            o: bind
-            device: /home/ktashbae/data/db
-    wp_db:
-        driver: local
-        driver_opts:
-            type: none
-            o: bind
-            device: /home/ktashbae/data/wordpress
+     wp_vol:
+         driver: local
+         driver_opts:
+             type: 'none'
+             o: 'bind'
+             device: '/home/ktashbae/data/wordpress'
+     db_vol:
+         driver: local
+         driver_opts:
+             type: 'none'
+             o: 'bind'
+             device: '/home/ktashbae/data/db'
