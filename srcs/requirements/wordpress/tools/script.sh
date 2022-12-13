@@ -7,6 +7,8 @@ cp /tmp/wp_config.php /var/www/wordpress/
 cp /tmp/www.conf /etc/php/7.3/fpm/pool.d/www.conf
 # read rights for the user and group
 chown -R www-data:www-data /var/www/wordpress/
+chown -R www-data:www-data /var/www/wordpress/wp-content
+chown -R www-data:www-data /var/www/wordpress/wp-content/plugins/
 
 usermod -aG www-data www-data
 #set up daemonize to 'no' in the php-fpm.conf 

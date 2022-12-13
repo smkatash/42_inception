@@ -12,9 +12,11 @@ build:
 up:
 			sudo docker-compose -f ./srcs/docker-compose.yml up -d --build
 
-down:		sudo docker-compose -f ./srcs/docker-compose.yml down
+down:
+			sudo docker-compose -f ./srcs/docker-compose.yml down
 
-clean:		sudo docker-compose -f ./srcs/docker-compose.yml down -v --rmi all --remove-orphans
+clean:
+			sudo docker-compose -f ./srcs/docker-compose.yml down -v --rmi all --remove-orphans
 
 fclean:		clean
 			sudo rm -rf /home/ktashbae/data/db
