@@ -1,6 +1,6 @@
 FROM		debian:buster
 
-RUN		echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+RUN			echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 # copy predefined scripts to tmp of container, data are cleared upon machine restart.
 COPY		./tools/script.sh 	/tmp/
@@ -18,7 +18,7 @@ RUN			apt-get update && apt-get install -y \
 ENTRYPOINT	["/usr/bin/dumb-init"]
 
 # inter-container communication
-EXPOSE		3306
+#EXPOSE		3306
 
 # execute script
 CMD			["bash", "/tmp/script.sh"]

@@ -1,9 +1,12 @@
 #!/bin/bash
 
 chown -R mysql:mysql /var/lib/mysql
+# bind to listen to all interfaces
 sed -i "s|.*bind-address\s*=.*|bind-address=0.0.0.0|" /etc/mysql/mariadb.conf.d/50-server.cnf
+# uncomment port
 sed -i "s|#port|port |" /etc/mysql/mariadb.conf.d/50-server.cnf
 
+# create database, user and change root password
 service mysql start
 
 mysql --user=$DB_ROOT << EOF
@@ -19,4 +22,8 @@ EOF
 
 sleep 5
 service mysql stop
+
+# mysqld_safe is the recommended way to start a mysqld server on Unix. 
+# mysqld_safe adds some safety features such as restarting the server 
+# when an error occurs and logging runtime information to an error log.
 exec mysqld_safe

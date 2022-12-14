@@ -18,7 +18,7 @@ RUN			rm /etc/nginx/sites-enabled/default
 # a simple process supervisor and init system designed to run as PID 1 inside
 ENTRYPOINT  ["/usr/bin/dumb-init"]
 # inter-container communication
-EXPOSE		443
+#EXPOSE		443
 
 # Keeps the logs free of messages about not being able to bind().
 CMD			["nginx", "-g", "daemon off;"]

@@ -26,7 +26,7 @@ RUN		curl -s -L https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp
 RUN 	chmod +x /usr/bin/wp
 
 # inter-container communication
-EXPOSE		9000
+#EXPOSE		9000
 
 # a simple process supervisor and init system designed to run as PID 1 inside
 ENTRYPOINT	["/usr/bin/dumb-init"]
