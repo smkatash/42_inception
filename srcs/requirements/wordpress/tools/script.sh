@@ -3,7 +3,7 @@
 #move wordpress compressed file to root directory & decompress it
 wp core download --path=/var/www/wordpress --allow-root
 
-cp /tmp/wp_config.php /var/www/wordpress/
+cp /tmp/wp-config.php /var/www/wordpress/
 cp /tmp/www.conf /etc/php/7.3/fpm/pool.d/www.conf
 # read rights for the user and group
 chown -R www-data:www-data /var/www/wordpress/

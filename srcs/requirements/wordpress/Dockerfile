@@ -5,7 +5,7 @@ RUN			echo 'debconf debconf/frontend select Noninteractive' | debconf-set-select
 # copy predefined scripts to tmp of container, data are cleared upon machine restart.
 COPY	./tools/script.sh /tmp/
 COPY	./conf/www.conf /tmp/
-COPY	./conf/wp_config.php /tmp/
+COPY	./conf/wp-config.php /tmp/
 
 # installation of necessary packages
 RUN		apt-get update && apt-get install -y \ 

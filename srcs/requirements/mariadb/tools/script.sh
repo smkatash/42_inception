@@ -17,7 +17,6 @@ UPDATE mysql.user SET Password=PASSWORD('$DB_ROOT_PWD') WHERE User='$DB_ROOT';
 UPDATE mysql.user SET plugin = '' WHERE User = '$DB_ROOT' AND host = 'localhost';
 EOF
 
-sleep 15
+sleep 5
 service mysql stop
-
 exec mysqld_safe
