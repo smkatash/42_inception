@@ -1,4 +1,4 @@
-#!bash
+#!/bin/bash
 
 if ! id $FTP_USER &>/dev/null; then
 	mkdir -p /var/www/wordpress
