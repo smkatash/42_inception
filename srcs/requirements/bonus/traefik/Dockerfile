@@ -7,4 +7,4 @@ COPY	./config/* /tools/
 
 RUN		chmod 755 -R /tools
 
-ENTRYPOINT [ "/tools/script.sh" ]
+ENTRYPOINT ["/tools/script.sh"]

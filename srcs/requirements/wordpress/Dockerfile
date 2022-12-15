@@ -22,15 +22,13 @@ RUN		apt-get update && apt-get install -y \
 RUN		mkdir -p /var/www/wordpress
 RUN		mkdir -p /run/php
 
+# install WP-CLI, command line tool for interacting with and managing WordPress sites.
 RUN		curl -s -L https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar --output /usr/bin/wp
+# rights for execution
 RUN 	chmod +x /usr/bin/wp
-
-# inter-container communication
-#EXPOSE		9000
 
 # a simple process supervisor and init system designed to run as PID 1 inside
 ENTRYPOINT	["/usr/bin/dumb-init"]
-
 
 # execute script
 CMD			["bash", "/tmp/script.sh"]

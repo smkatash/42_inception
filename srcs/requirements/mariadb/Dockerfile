@@ -17,8 +17,5 @@ RUN			apt-get update && apt-get install -y \
 # while also handling regular responsibilities of the init system (like reaping orphaned zombie processes).
 ENTRYPOINT	["/usr/bin/dumb-init"]
 
-# inter-container communication
-#EXPOSE		3306
-
 # execute script
 CMD			["bash", "/tmp/script.sh"]
