@@ -17,4 +17,5 @@ wp plugin update --all --path=/var/www/wordpress --allow-root
 wp user create $WP_USER $WP_USER_EMAIL --role=author --user_pass=$WP_USER_PASSWORD --path=/var/www/wordpress --allow-root
 #exec /usr/sbin/php-fpm7.3
 # excute php-fpm, set up daemonize to 'no' in the php-fpm.conf so that the Docker container itself can be run as daemon.
+
 exec /usr/sbin/php-fpm7.3 --nodaemonize --fpm-config /etc/php/7.3/fpm/php-fpm.conf

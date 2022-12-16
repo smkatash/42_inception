@@ -37,12 +37,14 @@ services:
          - wp_vol:/var/www/wordpress
         env_file: .env
 
+################### BONUS ##########################
+    # port vs expose -> port communication with the host, expose -> within containers, only for documentation
+    # So that Traefik can listen to the Docker events
     traefik:
         container_name: traefik
         build: ./requirements/bonus/traefik
         restart: unless-stopped
         volumes:
-          # So that Traefik can listen to the Docker events
           - /var/run/docker.sock:/var/run/docker.sock
         networks:
           - inception
@@ -64,14 +66,6 @@ services:
           - "21:21"
           - "21100-21110:21100-21110"
         env_file: .env
-    # static_web:
-    #     container_name: static_web
-    #     build: ./requirements/bonus/static
-    #     volumes:
-    #       - static_vol:/var/www/static
-    #     networks:
-    #       - inception
-    #     ports:
 
 volumes:
      wp_vol:
@@ -86,12 +80,6 @@ volumes:
              type: 'none'
              o: 'bind'
              device: '/home/ktashbae/data/db'
-    #  static_vol:
-    #     driver: local
-    #     driver_opts:
-    #         type: 'none'
-    #         o: 'bind'
-    #         device: '/home/ktashbae/data/static'
 
 networks:
     inception:
