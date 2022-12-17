@@ -3,6 +3,7 @@ version: '3.8'
 services:
     mariadb:
         container_name: mariadb
+        image: mariadb
         build: ./requirements/mariadb
         restart: unless-stopped
         networks:
@@ -13,6 +14,7 @@ services:
 
     nginx:
         container_name: nginx
+        image: nginx
         build: ./requirements/nginx/
         depends_on:
          - wordpress
@@ -27,6 +29,7 @@ services:
 
     wordpress:
         container_name: wordpress
+        image: wordpress
         build: ./requirements/wordpress/
         depends_on:
          - mariadb
@@ -38,10 +41,9 @@ services:
         env_file: .env
 
 ################### BONUS ##########################
-    # port vs expose -> port communication with the host, expose -> within containers, only for documentation
-    # So that Traefik can listen to the Docker events
     traefik:
         container_name: traefik
+        image: traefik
         build: ./requirements/bonus/traefik
         restart: unless-stopped
         volumes:
@@ -54,6 +56,7 @@ services:
 
     ftp:
         container_name: ftp
+        image: ftp
         build: ./requirements/bonus/ftp
         depends_on:
           - nginx

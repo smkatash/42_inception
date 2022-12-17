@@ -3,7 +3,6 @@ NAME = inception
 $(NAME):
 			sudo mkdir -p /home/ktashbae/data/db
 			sudo mkdir -p /home/ktashbae/data/wordpress
-			sudo mkdir -p /home/ktashbae/data/static
 			sudo docker-compose -f ./srcs/docker-compose.yml up -d --build
 
 all:  $(NAME)
@@ -25,4 +24,3 @@ fclean:		clean
 			sudo docker system prune --volumes --all --force
 			sudo docker network prune --force
 			sudo docker volume prune --force
-
